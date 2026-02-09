@@ -32,8 +32,14 @@ export const AddMovie = ({
   if (error) return <p>Error: {error.message}</p>;
   console.log(data);
   return (
-    <div>
-      <button onClick={() => addMovie()}>Add Movie</button>
+    <div className="pt-2">
+      <button
+        onClick={() => addMovie()}
+        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl shadow-lg shadow-emerald-900/20 active:scale-[0.98] transition-all uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-2"
+        disabled={loading}
+      >
+        {loading ? "Adding..." : "Add to Library"}
+      </button>
     </div>
   );
 };
