@@ -2,7 +2,8 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import Link from "next/link";
-import router from "next/router";
+import GetComments from "../../comments/components/GetComments";
+import AddComments from "../../comments/components/AddComments";
 
 const GET_MOVIE_DETAIL = gql`
   query Movie($id: ID) {
@@ -145,6 +146,17 @@ export const MovieDetail = ({ movieId }: { movieId: string }) => {
             <p className="text-xl leading-relaxed text-gray-300 font-medium italic font-serif">
               "{movie.plot || "No plot description available."}"
             </p>
+          </div>
+
+          <div className="space-y-12">
+            <div className="pt-12 border-t border-white/5">
+              <h2 className="text-white/40 text-[9px] font-black uppercase tracking-[0.25em] mb-12">
+                Audience Consensus
+              </h2>
+              <GetComments movieId={movie._id} />
+            </div>
+
+            <AddComments movie_id={movie._id} />
           </div>
         </div>
       </div>
