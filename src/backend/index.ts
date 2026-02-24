@@ -15,22 +15,26 @@ import {
 } from "./comments/graphql/schema";
 import { CommentsQuery } from "./comments/graphql/query";
 import { CommentsMutation } from "./comments/graphql/mutation";
+import { authMutationSchema, LoginSchema } from "./login/graphql/schema";
+import { AuthMutation } from "./login/graphql/mutation";
 
 const typeDefs = `#graphql
   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
   # This "Book" type defines the queryable fields for every book in our data source.
 
-${MovieSchema}  ${CommentsSchema}
+${MovieSchema}  ${CommentsSchema} ${LoginSchema}
 
   type Query {
 ${MovieQuerySchema}
 ${CommentsQuerySchema}
+
   }
 
   type Mutation {
  ${MovieMutationSchema}
 ${CommentsMutationSchema}
+${authMutationSchema}
   }
 `;
 
@@ -44,6 +48,7 @@ const resolvers = {
   Mutation: {
     ...MovieMutation,
     ...CommentsMutation,
+    ...AuthMutation,
   },
 };
 // The ApolloServer constructor requires two parameters: your schema
