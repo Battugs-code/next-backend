@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Loader2, Mail, Lock, LogIn } from "lucide-react";
 
 import Link from "next/link";
-import { log } from "console";
 
 const LOGIN = gql`
   mutation login($email: String!, $password: String!) {

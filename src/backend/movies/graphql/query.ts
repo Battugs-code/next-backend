@@ -28,4 +28,9 @@ export const MovieQuery = {
 
     return Movies.find().limit(perPage).skip(skip);
   },
+
+  genre: async () => {
+    const data = await Movies.distinct("genres");
+    return data;
+  },
 };

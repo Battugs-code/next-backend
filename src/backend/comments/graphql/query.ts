@@ -1,3 +1,4 @@
+import { Movies } from "@/backend/movies/types/model";
 import { Comments } from "../types/model";
 
 export const CommentsQuery = {

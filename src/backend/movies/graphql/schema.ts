@@ -22,6 +22,7 @@ export const MovieQuerySchema = `#graphql
 
     movie(genre: String, page: Int, _id: ID): [Movie]
     movies(title:String,page: Int!): [Movie]
+    genre: [String]
 
 `;
 export const MovieMutationSchema = `#graphql

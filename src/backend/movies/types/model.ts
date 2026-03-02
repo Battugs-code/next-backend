@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, model, Model, models } from "mongoose";
 
 export interface IMoviesDocument extends Document {
   title: string;
@@ -11,10 +11,10 @@ export interface IMoviesDocument extends Document {
   };
   runtime: number;
   directors: string[];
-
   genres: string[];
 }
 
+// Define schema
 const MovieSchema: Schema<IMoviesDocument> = new Schema({
   plot: { type: String },
   genres: { type: [String] },
@@ -29,4 +29,6 @@ const MovieSchema: Schema<IMoviesDocument> = new Schema({
   directors: { type: [String] },
 });
 
-export const Movies = model<IMoviesDocument>("movies", MovieSchema);
+// ✅ Dev-safe model definition
+export const Movies: Model<IMoviesDocument> =
+  models.Movies || model<IMoviesDocument>("Movies", MovieSchema);
