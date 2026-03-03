@@ -13,7 +13,7 @@ export const LoginSchema = `
 `;
 
 export const authMutationSchema = `
-      signUp(name: String!, email: String!, password: String!, VerifyPassword: String!):String
+      signUp(name: String!, email: String!, password: String!):String
       login(email: String!, password: String!): String  
 
 `;

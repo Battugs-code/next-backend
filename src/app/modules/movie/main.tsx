@@ -13,6 +13,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import Logout from "@/app/(auth)/logout";
 
 export default function MainMovie() {
   const [genre, setGenre] = useState("");
@@ -30,6 +32,7 @@ export default function MainMovie() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#ededed] p-6 lg:p-12 bg-gradient-movie">
+      <Logout />
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         <div className="lg:col-span-4 space-y-8">
           <div className="space-y-4">

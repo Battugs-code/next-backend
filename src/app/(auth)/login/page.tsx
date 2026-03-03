@@ -1,11 +1,17 @@
 "use client";
 import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client/react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Mail, Lock, LogIn } from "lucide-react";
-
+import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+const userFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+type ILoginInput = z.infer<typeof userFormSchema>;
 
 const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
@@ -14,22 +20,25 @@ const LOGIN = gql`
 `;
 
 const Login = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-
-  const [password, setPassword] = useState("");
-
-  const [login, { loading, error }] = useMutation<{ login: string }>(LOGIN, {
-    variables: {
-      email,
-      password,
+  const { handleSubmit, register } = useForm<z.infer<typeof userFormSchema>>({
+    resolver: zodResolver(userFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
     },
   });
+  const router = useRouter();
+  const [login, { loading, error }] = useMutation<{ login: string }>(LOGIN);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: ILoginInput) => {
     try {
-      const { data } = await login();
+      const { data } = await login({
+        variables: {
+          email: formData.email,
+          password: formData.password,
+        },
+      });
+
       if (data?.login) {
         localStorage.setItem("token", data.login);
         router.push("/");
@@ -38,23 +47,10 @@ const Login = () => {
       console.error("Login failed:", err);
     }
   };
-
   return (
     <div className="flex items-center justify-center p-4">
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8 shadow-2xl backdrop-blur-xl transition-all hover:border-white/20">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <LogIn className="h-6 w-6" />
-          </div>
-          <h2 className="text-3xl font-bold tracking-tight text-white">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-sm text-zinc-400">
-            Please enter your details to sign in
-          </p>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="space-y-2">
             <label
               className="text-sm font-medium text-zinc-300"
@@ -70,8 +66,7 @@ const Login = () => {
                 id="email"
                 type="email"
                 placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register("email")}
                 className="block w-full rounded-xl border border-zinc-800 bg-zinc-900/50 py-2.5 pl-10 pr-3 text-white transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 required
               />
@@ -93,8 +88,7 @@ const Login = () => {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password")}
                 className="block w-full rounded-xl border border-zinc-800 bg-zinc-900/50 py-2.5 pl-10 pr-3 text-white transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                 required
               />
@@ -109,7 +103,7 @@ const Login = () => {
           )}
 
           <button
-            type="submit"
+            onClick={handleSubmit(onSubmit)}
             disabled={loading}
             className="group relative flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50"
           >
